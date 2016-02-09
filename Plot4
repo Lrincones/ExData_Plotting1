@@ -1,0 +1,34 @@
+## Plot4 Week 1 Expl Data Anals
+## Load libraries
+library(lubridate)
+library(dplyr)
+## File is already in the working directory
+## "household_power_consumption.txt"
+## Reading into R
+house_data_set <- read.csv("household_power_consumption.txt", sep = ";", header = TRUE, stringsAsFactors = FALSE, na.strings = "?",colClasses = c("character", "character", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
+## reading the two required dates.
+house_data_subset <- filter(house_data_set, Date == "1/2/2007" | Date == "2/2/2007")  
+## Converting Date and Time to a single variable with the proper format for plotting
+house_data_subset$time_stamp <- paste(house_data_subset$Date, house_data_subset$Time)
+##
+## Preparing the variables to plot
+Global_active_power <- as.numeric(house_data_subset$Global_active_power)
+Dates_plot <- dmy_hms(house_data_subset$time_stamp)
+Voltage <- as.numeric(house_data_subset$Voltage)
+Metering_1 <- as.numeric(house_data_subset$Sub_metering_1)
+Metering_2 <- as.numeric(house_data_subset$Sub_metering_2)
+Metering_3 <- as.numeric(house_data_subset$Sub_metering_3)
+Global_reactive_power <- as.numeric(house_data_subset$Global_reactive_power)
+##
+## Preparing the plotting area
+png("Plot4.png", width=480, height=480)
+par(mfrow=c(2,2))
+## 4 Plots at the time
+plot(Dates_plot, Global_active_power, type = "l", ylab = "Global Active Power (kilowatts)", xlab = NA)
+plot(Dates_plot, Voltage, type="l", xlab="datetime", ylab="Voltage")
+plot(Dates_plot, Metering_1, type = "l", ylab = "Global Active Power (kilowatts)", xlab = NA)
+lines(Dates_plot, Metering_2, col = "red", type = "l")
+lines(Dates_plot, Metering_3, col = "blue", type = "l")
+legend("topright", lty = 1, col = c("black", "red", "blue"), legend = c("Sub_metering_1  ", "Sub_metering_2  ", "Sub_metering_3  "))
+plot(Dates_plot, Global_reactive_power, type = "l", ylab = "Global Reactive Power (kilowatts)", xlab = NA)       
+dev.off()       
