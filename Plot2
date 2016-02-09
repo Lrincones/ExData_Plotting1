@@ -1,0 +1,19 @@
+## Plot2 Week 1 Expl Data Anals
+## Load libraries
+library(lubridate)
+library(dplyr)
+## File is already in the working directory
+## "household_power_consumption.txt"
+## Reading into R
+house_data_set <- read.csv("household_power_consumption.txt", sep = ";", header = TRUE, stringsAsFactors = FALSE, na.strings = "?",colClasses = c("character", "character", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
+## reading the two required dates.
+house_data_subset <- filter(house_data_set, Date == "1/2/2007" | Date == "2/2/2007")  
+## Converting Date and Time to a single variable with the proper format for plotting
+house_data_subset$time_stamp <- paste(house_data_subset$Date, house_data_subset$Time)
+## Preparing the variables to plot
+Global_active_power <- as.numeric(house_data_subset$Global_active_power)
+Dates_plot <- dmy_hms(house_data_subset$time_stamp)
+## Plot 2
+png(filename = "Plot2.png",width = 480, height = 480)
+plot(Dates_plot, Global_active_power, type = "l", ylab = "Global Active Power (kilowatts)", xlab = NA)
+dev.off()
