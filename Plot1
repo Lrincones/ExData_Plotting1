@@ -1,0 +1,16 @@
+## Plot1 Week 1 Expl Data Anals
+## Load libraries
+library(lubridate)
+library(dplyr)
+## File is already in the working directory
+## "household_power_consumption.txt"
+## Reading into R
+house_data_set <- read.csv("household_power_consumption.txt", sep = ";", header = TRUE, stringsAsFactors = FALSE, na.strings = "?",colClasses = c("character", "character", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
+## reading the two required dates.
+house_data_subset <- filter(house_data_set, Date == "1/2/2007" | Date == "2/2/2007") 
+## Preparing the variable to be plot
+Global_active_power <- as.numeric(house_data_subset$Global_active_power)
+## Plot 1()
+png(filename = "Plot1.png",width = 480, height = 480)
+hist(Global_active_power, col = "red",  xlab = "Global Active Power (kilowatts)", main = "Global Active Power", ylab = "Frequency")
+dev.off()
